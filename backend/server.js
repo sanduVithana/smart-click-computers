@@ -25,12 +25,13 @@
 //   });
 // });
 
-import dotenv from "dotenv";
+import "dotenv/config";
+
 import connectDB from "./src/config/db.js";
 import app from "./src/app.js";
 import createAdmin from "./src/utils/createAdmin.js";
 
-dotenv.config();
+
 
 const startServer = async () => {
   try {
