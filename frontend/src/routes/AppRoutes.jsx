@@ -4,6 +4,7 @@ import Login from "../pages/admin/Login";
 import Dashboard from "../pages/admin/Dashboard";
 import ProtectedRoute from "./ProtectedRoute";
 import Categories from "../pages/admin/Categories";
+import Products from "../pages/admin/Products";
 
 function AppRoutes() {
   return (
@@ -35,6 +36,15 @@ function AppRoutes() {
         element={
           <ProtectedRoute>
             <Categories />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/products"
+        element={
+          <ProtectedRoute>
+            <Products />
           </ProtectedRoute>
         }
       />
