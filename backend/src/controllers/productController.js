@@ -654,4 +654,28 @@ export const getFeaturedProducts =
       });
     }
   };
+
+  export const searchProducts = async (
+  req,
+  res
+) => {
+  try {
+    const keyword =
+      req.query.keyword || "";
+
+    const products =
+      await Product.find({
+        name: {
+          $regex: keyword,
+          $options: "i",
+        },
+      }).populate("category");
+
+    res.json(products);
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
   

@@ -8,6 +8,7 @@ import {
   deleteProduct,
   getFeaturedProducts,
   getLatestProducts,
+  searchProducts,
 } from "../controllers/productController.js";
 
 import protect from "../middleware/authMiddleware.js";
@@ -24,7 +25,12 @@ router.get(
 router.get(
   "/latest",
   getLatestProducts
-);  
+);
+
+router.get(
+  "/search",
+  searchProducts
+);
 
 router
   .route("/")
