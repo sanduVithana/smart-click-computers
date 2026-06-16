@@ -406,26 +406,82 @@ export const createProduct = async (
   }
 };
 
-export const getProducts =
-  async (req, res) => {
-    try {
-      const products =
-        await Product.find()
-          .populate(
-            "category"
-          )
-          .sort({
-            createdAt: -1,
-          });
+export const getProducts = async (req, res) => {
+  try {
+    const { keyword, category, minPrice, maxPrice, inStock, sort, page, limit } = req.query;
 
-      res.json(products);
-    } catch (error) {
-      res.status(500).json({
-        message:
-          error.message,
-      });
+    // If no specific filter or pagination parameters, do a simple bulk fetch
+    if (!keyword && !category && !minPrice && !maxPrice && !inStock && !sort && !page && !limit) {
+      const products = await Product.find()
+        .populate("category")
+        .sort({ createdAt: -1 });
+      return res.json(products);
     }
-  };
+
+    const query = {};
+
+    // Keyword search (name, description, brand)
+    if (keyword) {
+      query.$or = [
+        { name: { $regex: keyword, $options: "i" } },
+        { description: { $regex: keyword, $options: "i" } },
+        { brand: { $regex: keyword, $options: "i" } },
+      ];
+    }
+
+    // Category filter
+    if (category) {
+      query.category = category;
+    }
+
+    // Price range
+    if (minPrice || maxPrice) {
+      query.price = {};
+      if (minPrice) query.price.$gte = Number(minPrice);
+      if (maxPrice) query.price.$lte = Number(maxPrice);
+    }
+
+    // Stock availability
+    if (inStock === "true") {
+      query.stockQuantity = { $gt: 0 };
+    }
+
+    // Sorting
+    let sortQuery = { createdAt: -1 };
+    if (sort === "priceAsc") {
+      sortQuery = { price: 1 };
+    } else if (sort === "priceDesc") {
+      sortQuery = { price: -1 };
+    } else if (sort === "newest") {
+      sortQuery = { createdAt: -1 };
+    } else if (sort === "oldest") {
+      sortQuery = { createdAt: 1 };
+    }
+
+    // Pagination
+    const pageNum = Number(page) || 1;
+    const limitNum = Number(limit) || 12;
+    const skipNum = (pageNum - 1) * limitNum;
+
+    const totalProducts = await Product.countDocuments(query);
+    const products = await Product.find(query)
+      .populate("category")
+      .sort(sortQuery)
+      .skip(skipNum)
+      .limit(limitNum);
+
+    res.json({
+      products,
+      page: pageNum,
+      pages: Math.ceil(totalProducts / limitNum),
+      total: totalProducts,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
 
   export const getProductById =
   async (req, res) => {
