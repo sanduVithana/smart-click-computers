@@ -411,11 +411,21 @@ export const getProducts = async (req, res) => {
     const { keyword, category, minPrice, maxPrice, inStock, sort, page, limit } = req.query;
 
     // If no specific filter or pagination parameters, do a simple bulk fetch
+    // Return a consistent paginated response shape so frontend can always
+    // read `products`, `page`, `pages`, and `total`.
     if (!keyword && !category && !minPrice && !maxPrice && !inStock && !sort && !page && !limit) {
-      const products = await Product.find()
+      const allProducts = await Product.find()
         .populate("category")
         .sort({ createdAt: -1 });
-      return res.json(products);
+
+      const totalProducts = allProducts.length;
+
+      return res.json({
+        products: allProducts,
+        page: 1,
+        pages: 1,
+        total: totalProducts,
+      });
     }
 
     const query = {};
