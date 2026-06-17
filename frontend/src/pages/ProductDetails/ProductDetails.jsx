@@ -38,8 +38,10 @@ export default function ProductDetails() {
           const relRes = await axios.get(
             `http://localhost:5000/api/products?category=${currentProd.category._id}`
           );
-          // filter out current product
-          const filtered = (relRes.data.products || []).filter(
+          const relatedProducts = Array.isArray(relRes.data)
+            ? relRes.data
+            : relRes.data.products || [];
+          const filtered = relatedProducts.filter(
             (p) => p._id !== currentProd._id
           );
           setRelated(filtered.slice(0, 4));

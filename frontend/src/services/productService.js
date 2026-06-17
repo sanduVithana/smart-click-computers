@@ -33,7 +33,10 @@ const API_URL = "http://localhost:5000/api/products";
 
 export const getProducts = async () => {
   const response = await axios.get(API_URL);
-  return response.data;
+  if (Array.isArray(response.data)) {
+    return response.data;
+  }
+  return response.data.products || [];
 };
 
 export const deleteProduct = async (id, token) => {

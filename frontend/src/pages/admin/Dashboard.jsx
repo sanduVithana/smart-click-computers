@@ -30,9 +30,9 @@ export default function Dashboard() {
         }),
       ]);
 
-      const products = prodRes.data;
-      const categories = catRes.data;
-      const inquiries = inqRes.data;
+      const products = Array.isArray(prodRes.data) ? prodRes.data : prodRes.data.products || [];
+      const categories = Array.isArray(catRes.data) ? catRes.data : catRes.data.categories || [];
+      const inquiries = Array.isArray(inqRes.data) ? inqRes.data : inqRes.data.data || [];
 
       const unreadCount = inquiries.filter((inq) => inq.status === "unread").length;
       const featuredCount = products.filter((p) => p.featured).length;
