@@ -16,6 +16,11 @@ export default function Inquiries() {
   const fetchInquiries = async () => {
     setLoading(true);
     try {
+      if (!user || !user.token) {
+        setInquiries([]);
+        return;
+      }
+
       const data = await getInquiries(user.token);
       setInquiries(data);
     } catch (err) {
@@ -28,7 +33,7 @@ export default function Inquiries() {
 
   useEffect(() => {
     fetchInquiries();
-  }, [user.token]);
+  }, [user]);
 
   const handleMarkStatus = async (id, currentStatus) => {
     const nextStatus = currentStatus === "unread" ? "read" : "unread";

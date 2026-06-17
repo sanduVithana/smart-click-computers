@@ -205,6 +205,7 @@ export default function Contact() {
                 {...register("message", { required: "Message is required" })}
               />
               {errors.message && <p className="text-xs text-red-500 mt-1">{errors.message.message}</p>}
+              <p className="text-xs text-slate-400 mt-2">Please enter a valid email address and phone number so we can contact you regarding your inquiry.</p>
             </div>
 
             {/* Submit Button */}
