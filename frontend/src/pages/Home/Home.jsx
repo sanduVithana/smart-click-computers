@@ -11,14 +11,56 @@ import {
   BadgeAlert,
   ArrowRight,
   Monitor,
-  Gamepad,
   HardDrive,
   Cpu,
   Star,
   Quote,
   Zap,
-  ChevronRight
+  ChevronRight,
+  Keyboard,
+  Mouse,
+  Laptop,
+  Layers,
+  Database,
+  Network,
+  Plug,
+  Server,
+  Speaker,
+  Headphones,
+  Webcam,
+  Printer,
+  Wifi,
+  Cable,
+  Battery,
+  Box
 } from "lucide-react";
+
+// Matches exact category keywords to Lucide icons
+const getCategoryIcon = (categoryName) => {
+  const name = categoryName.toLowerCase();
+  
+  if (name.includes("monitor")) return Monitor;
+  if (name.includes("keyboard")) return Keyboard;
+  if (name.includes("mouse") || name.includes("mice")) return Mouse;
+  if (name.includes("laptop")) return Laptop;
+  if (name.includes("desktop")) return Monitor;
+  if (name.includes("graphics card") || name.includes("gpu")) return Layers;
+  if (name.includes("ssd") || name.includes("hdd") || name.includes("hard drive")) return HardDrive;
+  if (name.includes("ram") || name.includes("memory")) return Database;
+  if (name.includes("processor") || name.includes("cpu")) return Cpu;
+  if (name.includes("motherboard")) return Network;
+  if (name.includes("power supply") || name.includes("power") || name.includes("ups")) return Plug;
+  if (name.includes("case") || name.includes("casing")) return Server;
+  if (name.includes("speaker")) return Speaker;
+  if (name.includes("headset") || name.includes("headphone")) return Headphones;
+  if (name.includes("webcam") || name.includes("camera")) return Webcam;
+  if (name.includes("printer")) return Printer;
+  if (name.includes("network") || name.includes("router") || name.includes("wifi")) return Wifi;
+  if (name.includes("cable") || name.includes("adapter")) return Cable;
+  if (name.includes("battery")) return Battery;
+  
+  return Box;
+};
 
 export default function Home() {
   const [featured, setFeatured] = useState([]);
@@ -52,15 +94,6 @@ export default function Home() {
     { title: "Technical Support", desc: "Professional system configuration, custom cabling, and desktop repairs.", icon: Wrench, color: "text-indigo-600 dark:text-indigo-400 bg-indigo-500/10" },
     { title: "Warranty Support", desc: "Hassle-free local returns and official brand warranty coverage.", icon: BadgeAlert, color: "text-amber-600 dark:text-amber-400 bg-amber-500/10" },
   ];
-
-  const categoryIcons = {
-    monitors: Monitor,
-    keyboards: Gamepad,
-    mice: Gamepad,
-    laptops: Monitor,
-    processors: Cpu,
-    ssds: HardDrive,
-  };
 
   const testimonials = [
     { name: "Damith Perera", role: "Software Engineer", comment: "The custom liquid-cooled PC they assembled is an absolute beast. Outstanding clean cable management and benchmark testing support.", stars: 5 },
@@ -194,14 +227,7 @@ export default function Home() {
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5">
             {categories.map((cat) => {
-              const matchedKey = cat.name.toLowerCase();
-              let Icon = Cpu;
-              for (const [k, icon] of Object.entries(categoryIcons)) {
-                if (matchedKey.includes(k)) {
-                  Icon = icon;
-                  break;
-                }
-              }
+              const Icon = getCategoryIcon(cat.name);
 
               return (
                 <motion.div key={cat._id} variants={itemVariants} whileHover={{ y: -4 }}>
