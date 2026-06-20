@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useTheme } from "../../context/ThemeContext";
 import { useAuth } from "../../context/AuthContext";
-import { Cpu, Sun, Moon, Menu, X, LayoutDashboard, LogIn } from "lucide-react";
+import { Sun, Moon, Menu, X, LayoutDashboard, LogIn } from "lucide-react";
+import logo from "../../assets/logo.jpg";
 
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
@@ -24,8 +25,8 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2 text-xl font-bold tracking-wider text-blue-600 dark:text-blue-400">
-            <Cpu className="h-6 w-6 text-blue-600 dark:text-blue-400 animate-pulse" />
+          <Link to="/" className="flex items-center space-x-3 text-xl font-bold tracking-wider text-blue-600 dark:text-blue-400">
+            <img src={logo} alt="SmartClick logo" className="h-10 w-10 rounded-2xl object-contain border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-1" />
             <span>Smart<span className="text-slate-800 dark:text-white">Click</span></span>
           </Link>
 
